@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         modify ember testem results
-// @description  tampermonkey script to call ember-test-helper server
+// @description  tampermonkey script to call ember-test-opener server
 // @match        http://localhost:7357/*/tests/index.html*
 // ==/UserScript==
 
