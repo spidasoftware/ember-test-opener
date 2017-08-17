@@ -12,10 +12,12 @@ const PORT = 8357;
     $('body').on('click', '#qunit-tests > li', function(e){
         if(e.ctrlKey || e.metaKey) {//command or control click
             var li = $(this);
-            var moduleName = li.find('.module-name').text();
-            var testName = li.find('.test-name').text();
+            var parts = [
+                li.find('.module-name').text(), 
+                li.find('.test-name').text()
+            ].map(encodeURIComponent);
             $.ajax({
-                url:`http://localhost:${PORT}/${encodeURIComponent(moduleName)}/${encodeURIComponent(testName)}`
+                url:`http://localhost:${PORT}/${parts.join('/')}`
             });
         }
     });

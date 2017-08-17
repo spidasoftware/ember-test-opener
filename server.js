@@ -25,13 +25,17 @@ http.createServer(function(request, response) {
     const testName = parts[2];
 
     if(moduleName.startsWith('JSHint - ')){
+        //TODO handle when files in app fail jshint that aren't in the tests dir
         openFile(testsDir + '/' + moduleName.replace('JSHint - ', ''));
 
     } else {
         //find the file with moduleName and testName in it
         const grepCmd = `grep -rl "module.*${moduleName}" "${testsDir}" | xargs grep -Hn "test.*${testName}"`;
         exec(grepCmd, (error, stdout, stderr) => {
-            if (error) {console.error(`exec error: ${error}`); return; }
+            if (error) {
+                //TODO on error, grep for just the moduleName only, without testName
+                console.error(`exec error: ${error}`); return; 
+            }
             const stdoutTrimmed = stdout.trim();
             if(stdoutTrimmed.length > 0){
 
