@@ -1,5 +1,7 @@
 # Ember Test Opener
 
+Open ember tests from testem results.
+
 ## Installation
 
 1. Make sure testem isn't launching browsers.  Use your main browser by editing testem config and setting `launch_in_dev` to an empty list 

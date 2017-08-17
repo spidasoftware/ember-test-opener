@@ -25,7 +25,7 @@ http.createServer(function(request, response) {
     const testName = parts[2];
 
     //find the file with moduleName and testName in it
-    const grepCmd = `grep -rl "${moduleName}" "${testsDir}" | xargs grep -Hn "${testName}"`;
+    const grepCmd = `grep -rl "module.*${moduleName}" "${testsDir}" | xargs grep -Hn "test.*${testName}"`;
     exec(grepCmd, (error, stdout, stderr) => {
         if (error) {console.error(`exec error: ${error}`); return; }
         const stdoutTrimmed = stdout.trim();
