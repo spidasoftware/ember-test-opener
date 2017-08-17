@@ -39,10 +39,14 @@ http.createServer(function(request, response) {
             //open the file and go to the line number where the testName is found
             const lineNumberStr = lineNumberPrefix ? (lineNumberPrefix + linesObj[0].lineNum) : '';
             const finalCommand = `${editor} "${linesObj[0].file}"${lineNumberStr}`;
-            console.log(`Executing: ${finalCommand}`);
-            exec(finalCommand, (error, stdout, stderr) => {
-                if (error) {console.error(`exec error: ${error}`); return; }
-            });
+            if(editor.includes('vi')){
+                console.log(`Run this: ${finalCommand}`);
+            } else {
+                console.log(`Executing: ${finalCommand}`);
+                exec(finalCommand, (error, stdout, stderr) => {
+                    if (error) {console.error(`exec error: ${error}`); return; }
+                });
+            }
         } else {
             console.log(`No files found in ${testsDir} containing '${moduleName}' and '${testName}'.`)
         }
