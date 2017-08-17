@@ -1,6 +1,7 @@
 # Ember Test Opener
-
 Open ember tests from testem results.
+
+![ember-test-opener](https://user-images.githubusercontent.com/408586/29408169-3240b376-8315-11e7-8bf4-fc81edc1ca56.gif)
 
 ## Installation
 
