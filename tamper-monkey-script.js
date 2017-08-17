@@ -10,7 +10,7 @@ const PORT = 8357;
     'use strict';
 
     $('body').on('click', '#qunit-tests > li', function(e){
-        if(e.which == 1) {//command or control click
+        if(e.ctrlKey || e.metaKey) {//command or control click
             var li = $(this);
             var moduleName = li.find('.module-name').text();
             var testName = li.find('.test-name').text();
