@@ -13,5 +13,5 @@ Open ember tests from testem results.
 
 1. Run `node /path/to/server.js` in your ember app directory. (It assumes the `tests` directory is in the current directory.)
 1. Open ember tests in your main browser [http://localhost:7357/](http://localhost:7357/)
-1. Command + Click the test your want to open (the red bar or inside the red box).
+1. Command + Click the test your want to open (the red or blue test row or inside the expanded test box).
 1. The server should open the test module in your text editor and go to the first line of the test.
