@@ -14,7 +14,9 @@ const PORT = 8357;
             var li = $(this);
             var moduleName = li.find('.module-name').text();
             var testName = li.find('.test-name').text();
-            $.ajax({url:`http://localhost:${PORT}/${moduleName}/${testName}`});
+            $.ajax({
+                url:`http://localhost:${PORT}/${encodeURIComponent(moduleName)}/${encodeURIComponent(testName)}`
+            });
         }
     });
 

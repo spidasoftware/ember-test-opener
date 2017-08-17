@@ -20,43 +20,52 @@ http.createServer(function(request, response) {
     console.log(`Request URL: ${serverPath}${request.url}`);
 	request.pipe(process.stdout);
 
-    const parts = request.url.split('/').map(decodeURI);
+    const parts = request.url.split('/').map(decodeURIComponent);
     const moduleName = parts[1];
     const testName = parts[2];
 
-    //find the file with moduleName and testName in it
-    const grepCmd = `grep -rl "module.*${moduleName}" "${testsDir}" | xargs grep -Hn "test.*${testName}"`;
-    exec(grepCmd, (error, stdout, stderr) => {
-        if (error) {console.error(`exec error: ${error}`); return; }
-        const stdoutTrimmed = stdout.trim();
-        if(stdoutTrimmed.length > 0){
+    if(moduleName.startsWith('JSHint - ')){
+        openFile(testsDir + '/' + moduleName.replace('JSHint - ', ''));
 
-            const linesObj = stdout.trim().split('\n').map(line=>{
-                const parts = line.split(':');
-                return {file:parts[0], lineNum:parts[1]};
-            });
+    } else {
+        //find the file with moduleName and testName in it
+        const grepCmd = `grep -rl "module.*${moduleName}" "${testsDir}" | xargs grep -Hn "test.*${testName}"`;
+        exec(grepCmd, (error, stdout, stderr) => {
+            if (error) {console.error(`exec error: ${error}`); return; }
+            const stdoutTrimmed = stdout.trim();
+            if(stdoutTrimmed.length > 0){
 
-            //open the file and go to the line number where the testName is found
-            const lineNumberStr = lineNumberPrefix ? (lineNumberPrefix + linesObj[0].lineNum) : '';
-            const finalCommand = `${editor} "${linesObj[0].file}"${lineNumberStr}`;
-            if(editor.includes('vi')){
-                console.log(`Run this: ${finalCommand}`);
-            } else {
-                console.log(`Executing: ${finalCommand}`);
-                exec(finalCommand, (error, stdout, stderr) => {
-                    if (error) {console.error(`exec error: ${error}`); return; }
+                const linesObj = stdout.trim().split('\n').map(line=>{
+                    const parts = line.split(':');
+                    return {file:parts[0], lineNum:parts[1]};
                 });
-            }
-        } else {
-            console.log(`No files found in ${testsDir} containing '${moduleName}' and '${testName}'.`)
-        }
 
-    });
+                //open the file and go to the line number where the testName is found
+                openFile(linesObj[0].file, linesObj[0].lineNum);
+            } else {
+                console.log(`No files found in ${testsDir} containing '${moduleName}' and '${testName}'.`)
+            }
+
+        });
+    }
 
     response.writeHead(200, {"Content-Type":"text/plain", "Access-Control-Allow-Origin":"*"});
     response.end("");
 
 }).listen(port);
+
+function openFile(filePath, lineNumber){
+    const lineNumberStr = (lineNumberPrefix && lineNumber) ? (lineNumberPrefix + lineNumber) : '';
+    const finalCommand = `${editor} "${filePath}"${lineNumberStr}`;
+    if(editor.includes('vi')){
+        console.log(`Run this: ${finalCommand}`);
+    } else {
+        console.log(`Executing: ${finalCommand}`);
+        exec(finalCommand, (error, stdout, stderr) => {
+            if (error) {console.error(`exec error: ${error}`); return; }
+        });
+    }
+}
 
 console.log(serverPath);
 
